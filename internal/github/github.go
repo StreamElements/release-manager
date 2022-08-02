@@ -15,7 +15,8 @@ import (
 )
 
 type Service struct {
-	Token string
+	Organization string
+	Token        string
 }
 
 func (s *Service) req(ctx context.Context, method, path string, body io.Reader) (*http.Request, error) {
@@ -28,7 +29,7 @@ func (s *Service) req(ctx context.Context, method, path string, body io.Reader) 
 	if err != nil {
 		return nil, err
 	}
-	req.SetBasicAuth("lunarway", s.Token)
+	req.SetBasicAuth(s.Organization, s.Token)
 	return req, nil
 }
 
@@ -42,7 +43,7 @@ func (s *Service) TagRepo(ctx context.Context, repository, tag, sha string) erro
 	if err != nil {
 		return err
 	}
-	req, err := s.req(ctx, http.MethodPost, fmt.Sprintf("repos/lunarway/%s/git/refs", repository), b)
+	req, err := s.req(ctx, http.MethodPost, fmt.Sprintf("repos/%s/%s/git/refs", s.Organization, repository), b)
 	if err != nil {
 		return err
 	}
@@ -85,7 +86,7 @@ func (s *Service) updateTag(ctx context.Context, repository, tag, sha string) er
 	if err != nil {
 		return err
 	}
-	req, err := s.req(ctx, http.MethodPatch, fmt.Sprintf("repos/lunarway/%s/git/refs/tags/%s", repository, tag), b)
+	req, err := s.req(ctx, http.MethodPatch, fmt.Sprintf("repos/%s/%s/git/refs/tags/%s", s.Organization, repository, tag), b)
 	if err != nil {
 		return err
 	}

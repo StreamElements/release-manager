@@ -94,6 +94,7 @@ type s3storageOptions struct {
 type startOptions struct {
 	slackAuthToken            *string
 	githubAPIToken            *string
+	githubOrganization        *string
 	grafana                   *grafanaOptions
 	configRepo                *configRepoOptions
 	gitConfigOpts             *git.GitConfig
@@ -169,7 +170,8 @@ func NewStart(startOptions *startOptions) *cobra.Command {
 			}
 
 			github := github.Service{
-				Token: *startOptions.githubAPIToken,
+				Token:        *startOptions.githubAPIToken,
+				Organization: *startOptions.githubOrganization,
 			}
 			ctx := context.Background()
 			close, err := gitSvc.InitMasterRepo(ctx)

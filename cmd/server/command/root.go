@@ -21,6 +21,7 @@ func NewRoot(version string) (*cobra.Command, error) {
 	grafanaOpts := grafanaOptions{}
 	var slackAuthToken string
 	var githubAPIToken string
+	var githubOrganization string
 	var configRepoOpts configRepoOptions
 	var gitConfigOpts git.GitConfig
 	var gpgKeyPaths []string
@@ -64,6 +65,7 @@ func NewRoot(version string) (*cobra.Command, error) {
 			grafana:                   &grafanaOpts,
 			slackAuthToken:            &slackAuthToken,
 			githubAPIToken:            &githubAPIToken,
+			githubOrganization:        &githubOrganization,
 			configRepo:                &configRepoOpts,
 			gitConfigOpts:             &gitConfigOpts,
 			s3storage:                 &s3storageOpts,
@@ -87,6 +89,7 @@ func NewRoot(version string) (*cobra.Command, error) {
 	command.PersistentFlags().StringVar(&configRepoOpts.SSHPrivateKeyPath, "ssh-private-key", "/etc/release-manager/ssh/identity", "ssh-private-key for the config repo")
 	command.PersistentFlags().StringVar(&httpOpts.GithubWebhookSecret, "github-webhook-secret", os.Getenv("GITHUB_WEBHOOK_SECRET"), "github webhook secret")
 	command.PersistentFlags().StringVar(&githubAPIToken, "github-api-token", os.Getenv("GITHUB_API_TOKEN"), "github api token for tagging releases")
+	command.PersistentFlags().StringVar(&githubOrganization, "github-organization", os.Getenv("GITHUB_ORGANIZATION"), "github organization name for tagging releases")
 	command.PersistentFlags().StringVar(&slackAuthToken, "slack-token", os.Getenv("SLACK_TOKEN"), "token to be used to communicate with the slack api")
 	command.PersistentFlags().Var(&grafanaOpts, "grafana-annotations", "configuration of Grafana environments to annotate. Use comma separated list for multiple environments")
 	command.PersistentFlags().StringVar(&emailSuffix, "email-suffix", "", "company email suffix to expect. E.g.: '@example.com'")
